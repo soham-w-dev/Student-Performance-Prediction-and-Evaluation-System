@@ -25,7 +25,20 @@ if st.button("Predict Performance"):
     input_data = np.array([[hours, scores, extra_val, sleep, papers]])
     input_scaled = scaler.transform(input_data)
     
-    # Predict
+    # Predict with ANN
     prediction = model.predict(input_scaled)
     
+    st.subheader("🤖 Neural Network Prediction")
     st.metric("Predicted Performance Index", f"{prediction[0][0]:.2f}")
+    
+    # NEW: Predict with Fuzzy Logic
+    import sys
+    sys.path.append('src')
+    from fuzzy_logic import get_fuzzy_recommendation
+    
+    fuzzy_score, fuzzy_text = get_fuzzy_recommendation(hours, sleep, scores)
+    
+    st.subheader("🧠 Fuzzy Logic Analysis")
+    st.info(f"**Expert Recommendation:** {fuzzy_text}")
+    st.progress(int(fuzzy_score) / 100)
+    st.caption(f"Fuzzy Routine Health Score: {fuzzy_score:.1f}/100")
